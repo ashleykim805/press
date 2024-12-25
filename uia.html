@@ -33,14 +33,6 @@
         const soundU = document.getElementById('soundU');
         const soundI = document.getElementById('soundI');
         const soundA = document.getElementById('soundA');
-
-        moveUia() {
-            if (uiaMoving) {
-                imageElement.src = "uia_move.gif";
-            } else {
-                imageElement.src = "uia_still.gif";
-            }
-        }
         
         document.addEventListener('keydown', (event) => {
             const uiaPrev = uiaMoving; 
