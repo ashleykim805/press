@@ -44,4 +44,42 @@
             outputDiv.innerHTML = "Loading..."; // Show loading message
 
             if (!url) {
-                errorDiv.textContent = "Please enter a U
+                errorDiv.textContent = "Please enter a URL.";
+                outputDiv.innerHTML = ""; // Clear output div
+                return;
+            }
+
+            // Use a CORS proxy to bypass browser restrictions
+            const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+
+            try {
+                const response = await fetch(proxyUrl + url, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                        'Accept-Language': 'en-US,en;q=0.9',
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache',
+                        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
+                        'Referer': 'https://www.google.com/',
+                        'Upgrade-Insecure-Requests': '1',
+                    },
+                    // Credentials cannot be included for CORS proxies
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+
+                const html = await response.text();
+
+                // Display the response in the output div
+                outputDiv.textContent = html;
+            } catch (error) {
+                errorDiv.textContent = `Error: ${error.message}\n\nNote: CORS restrictions might apply if the server does not allow cross-origin requests.`;
+                outputDiv.innerHTML = ""; // Clear output div
+            }
+        });
+    </script>
+</body>
+</html>
