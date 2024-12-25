@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extract and Display Specific Div</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label, input, button {
+            margin-bottom: 10px;
+            display: block;
+        }
+        #output {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+            overflow: auto;
+            max-height: 500px;
+        }
+        #error {
+            color: red;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Extract and Display Specific Div</h1>
+    <label for="url">Enter URL:</label>
+    <input type="text" id="url" placeholder="https://example.com">
+    <button id="fetch-btn">Fetch and Display</button>
+    <div id="error"></div>
+    <div id="output">Extracted content will appear here...</div>
+
+    <script>
+        document.getElementById('fetch-btn').addEventListener('click', async () => {
+            const url = document.getElementById('url').value;
+            const outputDiv = document.getElementById('output');
+            const errorDiv = document.getElementById('error');
+
+            errorDiv.textContent = ""; // Clear previous errors
+            outputDiv.innerHTML = "Loading..."; // Show loading message
+
+            if (!url) {
+                errorDiv.textContent = "Please enter a URL.";
+                outputDiv.innerHTML = ""; // Clear output div
+                return;
+            }
+
+            // Use a CORS proxy to bypass browser restrictions
+            const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+
+            try {
+                const response = await fetch(proxyUrl + url, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                        'Accept-Language': 'en-US,en;q=0.9',
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache',
+                        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+
+                const html = await response.text();
+
+                // Parse the HTML response into a DOM
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                // Extract the <div id="app"> content
+                const appDiv = doc.querySelector('#app');
+
+                if (appDiv) {
+                    // Display the extracted content
+                    outputDiv.innerHTML = appDiv.innerHTML;
+                } else {
+                    outputDiv.innerHTML = "No <div id='app'> found in the response.";
+                }
+            } catch (error) {
+                errorDiv.textContent = `Error: ${error.message}\n\nNote: CORS restrictions might apply if the server does not allow cross-origin requests.`;
+                outputDiv.innerHTML = ""; // Clear output div
+            }
+        });
+    </script>
+</body>
+</html>
