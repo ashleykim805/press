@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch and Display Raw HTML</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label, input, button {
+            margin-bottom: 10px;
+            display: block;
+        }
+        #output {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+            overflow: auto;
+            max-height: 500px;
+            white-space: pre-wrap; /* Preserve HTML structure */
+            background-color: #f9f9f9;
+        }
+        #error {
+            color: red;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fetch and Display Raw HTML</h1>
+    <label for="url">Enter URL:</label>
+    <input type="text" id="url" placeholder="https://example.com">
+    <button id="fetch-btn">Fetch Raw HTML</button>
+    <div id="error"></div>
+    <div id="output">Raw HTML content will appear here...</div>
+
+    <script>
+        document.getElementById('fetch-btn').addEventListener('click', async () => {
+            const url = document.getElementById('url').value;
+            const outputDiv = document.getElementById('output');
+            const errorDiv = document.getElementById('error');
+
+            errorDiv.textContent = ""; // Clear previous errors
+            outputDiv.textContent = "Loading..."; // Show loading message
+
+            if (!url) {
+                errorDiv.textContent = "Please enter a URL.";
+                outputDiv.textContent = ""; // Clear output div
+                return;
+            }
+
+            // Use a CORS proxy to bypass browser restrictions
+            const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+
+            try {
+                const response = await fetch(proxyUrl + url, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                        'Accept-Language': 'en-US,en;q=0.9',
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache',
+                        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+
+                const rawHtml = await response.text();
+
+                // Display the raw server response
+                outputDiv.textContent = rawHtml;
+            } catch (error) {
+                errorDiv.textContent = `Error: ${error.message}\n\nNote: CORS restrictions might apply if the server does not allow cross-origin requests.`;
+                outputDiv.textContent = ""; // Clear output div
+            }
+        });
+    </script>
+</body>
+</html>
