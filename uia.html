@@ -20,7 +20,7 @@
     </style>
 </head>
 <body>
-    <img id="dynamicImage" src="https://via.placeholder.com/300" alt="Press a key!">
+    <img id="dynamicImage" src="uia_still.gif" alt="Press a key!">
 
     <audio id="soundU" src="https://www.soundjay.com/buttons/sounds/beep-01a.mp3"></audio>
     <audio id="soundI" src="https://www.soundjay.com/button/beep-02.mp3"></audio>
@@ -33,7 +33,7 @@
         const soundA = document.getElementById('soundA');
 
         const images = [
-            "https://www.uiatoken.com/_next/image?url=%2Fhero.gif&w=3840&q=75"
+            "uia_move.gif"
         ];
 
         document.addEventListener('keydown', (event) => {
@@ -57,6 +57,9 @@
                     // Do nothing for other keys
                     break;
             }
+        });
+        document.addEventListener('keyup', (event) => {
+            imageElement.src = "uia_still.gif";
         });
     </script>
 </body>
