@@ -43,7 +43,11 @@
         }
         
         document.addEventListener('keydown', (event) => {
-            uiaMoving = true;
+            const uiaPrev = uiaMoving; 
+            if (uiaPrev == false) {
+                imageElement.src = "uia_move.gif";
+                uiaMoving = true;
+            }
 
             switch (event.key.toLowerCase()) {
                 case 'u':
@@ -63,8 +67,13 @@
                     break;
             }
         });
+        
         document.addEventListener('keyup', (event) => {
-            uiaMoving = false;
+            const uiaPrev = uiaMoving; 
+            if (uiaPrev == true) {
+                imageElement.src = "uia_still.gif";
+                uiaMoving = false;
+            }
         });
     </script>
 </body>
