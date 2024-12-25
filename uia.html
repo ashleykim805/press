@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image and Sound Interaction</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: white;
+        }
+        img {
+            max-width: 90%;
+            max-height: 90%;
+        }
+    </style>
+</head>
+<body>
+    <img id="dynamicImage" src="https://via.placeholder.com/300" alt="Press a key!">
+
+    <audio id="soundU" src="https://www.soundjay.com/button/beep-01a.mp3"></audio>
+    <audio id="soundI" src="https://www.soundjay.com/button/beep-02.mp3"></audio>
+    <audio id="soundA" src="https://www.soundjay.com/button/beep-03.mp3"></audio>
+
+    <script>
+        const imageElement = document.getElementById('dynamicImage');
+        const soundU = document.getElementById('soundU');
+        const soundI = document.getElementById('soundI');
+        const soundA = document.getElementById('soundA');
+
+        const images = [
+            "https://via.placeholder.com/300/FF0000", 
+            "https://via.placeholder.com/300/00FF00", 
+            "https://via.placeholder.com/300/0000FF",
+            "https://via.placeholder.com/300/FFFF00"
+        ];
+
+        document.addEventListener('keydown', (event) => {
+            const randomImage = images[Math.floor(Math.random() * images.length)];
+            imageElement.src = randomImage;
+
+            switch (event.key.toLowerCase()) {
+                case 'u':
+                    soundU.currentTime = 0;
+                    soundU.play();
+                    break;
+                case 'i':
+                    soundI.currentTime = 0;
+                    soundI.play();
+                    break;
+                case 'a':
+                    soundA.currentTime = 0;
+                    soundA.play();
+                    break;
+                default:
+                    // Do nothing for other keys
+                    break;
+            }
+        });
+    </script>
+</body>
+</html>
