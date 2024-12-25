@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch and Display New HTML</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label, input, button {
+            margin-bottom: 10px;
+            display: block;
+        }
+        #error {
+            color: red;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fetch and Display New HTML</h1>
+    <label for="url">Enter URL:</label>
+    <input type="text" id="url" placeholder="https://example.com">
+    <button id="fetch-btn">Fetch and Show</button>
+    <div id="error"></div>
+
+    <script>
+        document.getElementById('fetch-btn').addEventListener('click', async () => {
+            const url = document.getElementById('url').value;
+            const errorDiv = document.getElementById('error');
+
+            errorDiv.textContent = ""; // Clear previous errors
+
+            if (!url) {
+                errorDiv.textContent = "Please enter a URL.";
+                return;
+            }
+
+            // Use a CORS proxy to bypass browser restrictions
+            const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+
+            try {
+                const response = await fetch(proxyUrl + url, { method: 'GET' });
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+
+                const html = await response.text();
+
+                // Create a Blob with the fetched HTML content
+                const blob = new Blob([html], { type: 'text/html' });
+
+                // Create a URL for the Blob
+                const blobUrl = URL.createObjectURL(blob);
+
+                // Open the Blob URL in a new tab or window
+                window.open(blobUrl, '_blank');
+            } catch (error) {
+                errorDiv.textContent = `Error: ${error.message}\n\nNote: CORS restrictions might apply if the server does not allow cross-origin requests.`;
+            }
+        });
+    </script>
+</body>
+</html>
