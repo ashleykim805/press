@@ -48,7 +48,8 @@
                 const html = await response.text();
                 responseArea.value = html;
             } catch (error) {
-                responseArea.value = `Error: ${error.message}\n\nNote: CORS restrictions might apply if the server does not allow cross-origin requests.`;
+                responseArea.value = `Error: ${error.message}\n\nNote: CORS restrictions might apply if the server does not allow cross-origin requests.`
+                + error;
             }
         });
     </script>
