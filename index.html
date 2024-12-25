@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fetch and Display HTML</title>
+    <title>Fetch and Display HTML in Div</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,11 +13,12 @@
             margin-bottom: 10px;
             display: block;
         }
-        iframe {
-            width: 100%;
-            height: 500px;
+        #output {
             border: 1px solid #ccc;
+            padding: 20px;
             margin-top: 20px;
+            overflow: auto;
+            max-height: 500px;
         }
         #error {
             color: red;
@@ -27,26 +28,24 @@
 </head>
 <body>
     <h1>Fetch and Display HTML</h1>
-    <p>
-        visit <a href="https://cors-anywhere.herokuapp.com/">here</a> and get temporary access
-    </p>
     <label for="url">Enter URL:</label>
     <input type="text" id="url" placeholder="https://example.com">
     <button id="fetch-btn">Fetch and Display</button>
     <div id="error"></div>
-    <iframe id="output" title="Fetched HTML Output"></iframe>
+    <div id="output">Fetched HTML will appear here...</div>
 
     <script>
         document.getElementById('fetch-btn').addEventListener('click', async () => {
             const url = document.getElementById('url').value;
-            const iframe = document.getElementById('output');
+            const outputDiv = document.getElementById('output');
             const errorDiv = document.getElementById('error');
 
             errorDiv.textContent = ""; // Clear previous errors
-            iframe.srcdoc = "";       // Clear previous content
+            outputDiv.innerHTML = "Loading..."; // Show loading message
 
             if (!url) {
                 errorDiv.textContent = "Please enter a URL.";
+                outputDiv.innerHTML = ""; // Clear output div
                 return;
             }
 
@@ -61,10 +60,11 @@
 
                 const html = await response.text();
 
-                // Display the HTML in the iframe
-                iframe.srcdoc = html;
+                // Display the HTML in the div
+                outputDiv.innerHTML = html;
             } catch (error) {
                 errorDiv.textContent = `Error: ${error.message}\n\nNote: CORS restrictions might apply if the server does not allow cross-origin requests.`;
+                outputDiv.innerHTML = ""; // Clear output div
             }
         });
     </script>
