@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch and Sanitize HTML</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label, input, button {
+            margin-bottom: 10px;
+            display: block;
+        }
+        #output {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+            overflow: auto;
+            max-height: 500px;
+        }
+        #error {
+            color: red;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fetch and Sanitize HTML</h1>
+    <label for="url">Enter URL:</label>
+    <input type="text" id="url" placeholder="https://example.com">
+    <button id="fetch-btn">Fetch and Sanitize</button>
+    <div id="error"></div>
+    <div id="output">Sanitized HTML content will appear here...</div>
+
+    <script>
+        document.getElementById('fetch-btn').addEventListener('click', async () => {
+            const url = document.getElementById('url').value;
+            const outputDiv = document.getElementById('output');
+            const errorDiv = document.getElementById('error');
+
+            errorDiv.textContent = ""; // Clear previous errors
+            outputDiv.innerHTML = "Loading..."; // Show loading message
+
+            if (!url) {
+                errorDiv.textContent = "Please enter a URL.";
+                outputDiv.innerHTML = ""; // Clear output div
+                return;
+            }
+
+            // Use a CORS proxy to bypass browser restrictions
+            const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+
+            try {
+                const response = await fetch(proxyUrl + url, { method: 'GET' });
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+
+                const html = await response.text();
+
+                // Parse the HTML string into a DOM object
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                // Remove all <script> and inline JavaScript
+                doc.querySelectorAll('script, [onload], [onclick], [onmouseover], [onerror]').forEach(el => el.remove());
+
+                // Inject the sanitized content into the output div
+                outputDiv.innerHTML = doc.body.innerHTML;
+            } catch (error) {
+                errorDiv.textContent = `Error: ${error.message}\n\nNote: CORS restrictions might apply if the server does not allow cross-origin requests.`;
+                outputDiv.innerHTML = ""; // Clear output div
+            }
+        });
+    </script>
+</body>
+</html>
