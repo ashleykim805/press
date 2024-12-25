@@ -38,7 +38,8 @@
             }
 
             try {
-                const response = await fetch(url, { method: 'GET' });
+                const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+                const response = await fetch(proxyUrl + url, { method: 'GET' });
 
                 if (!response.ok) {
                     throw new Error(`HTTP Error: ${response.status}`);
