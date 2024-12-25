@@ -27,18 +27,23 @@
     <audio id="soundA" src="https://www.soundjay.com/button/beep-03.mp3"></audio>
 
     <script>
+        let uiaMoving = false;
+        
         const imageElement = document.getElementById('dynamicImage');
         const soundU = document.getElementById('soundU');
         const soundI = document.getElementById('soundI');
         const soundA = document.getElementById('soundA');
 
-        const images = [
-            "uia_move.gif"
-        ];
-
+        moveUia() {
+            if (uiaMoving) {
+                imageElement.src = "uia_move.gif";
+            } else {
+                imageElement.src = "uia_still.gif";
+            }
+        }
+        
         document.addEventListener('keydown', (event) => {
-            const randomImage = images[Math.floor(Math.random() * images.length)];
-            imageElement.src = randomImage;
+            uiaMoving = true;
 
             switch (event.key.toLowerCase()) {
                 case 'u':
@@ -59,7 +64,7 @@
             }
         });
         document.addEventListener('keyup', (event) => {
-            imageElement.src = "uia_still.gif";
+            uiaMoving = false;
         });
     </script>
 </body>
