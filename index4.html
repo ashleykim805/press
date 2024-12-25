@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fetch and Sanitize HTML</title>
+    <title>Advanced Fetch Request</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,12 +27,12 @@
     </style>
 </head>
 <body>
-    <h1>Fetch and Sanitize HTML</h1>
+    <h1>Advanced Fetch Request</h1>
     <label for="url">Enter URL:</label>
     <input type="text" id="url" placeholder="https://example.com">
-    <button id="fetch-btn">Fetch and Sanitize</button>
+    <button id="fetch-btn">Fetch and Display</button>
     <div id="error"></div>
-    <div id="output">Sanitized HTML content will appear here...</div>
+    <div id="output">Response will appear here...</div>
 
     <script>
         document.getElementById('fetch-btn').addEventListener('click', async () => {
@@ -44,36 +44,4 @@
             outputDiv.innerHTML = "Loading..."; // Show loading message
 
             if (!url) {
-                errorDiv.textContent = "Please enter a URL.";
-                outputDiv.innerHTML = ""; // Clear output div
-                return;
-            }
-
-            // Use a CORS proxy to bypass browser restrictions
-            const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-
-            try {
-                const response = await fetch(proxyUrl + url, { method: 'GET' });
-                if (!response.ok) {
-                    throw new Error(`HTTP Error: ${response.status}`);
-                }
-
-                const html = await response.text();
-
-                // Parse the HTML string into a DOM object
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-
-                // Remove all <script> and inline JavaScript
-                doc.querySelectorAll('script, [onload], [onclick], [onmouseover], [onerror]').forEach(el => el.remove());
-
-                // Inject the sanitized content into the output div
-                outputDiv.innerHTML = doc.body.innerHTML;
-            } catch (error) {
-                errorDiv.textContent = `Error: ${error.message}\n\nNote: CORS restrictions might apply if the server does not allow cross-origin requests.`;
-                outputDiv.innerHTML = ""; // Clear output div
-            }
-        });
-    </script>
-</body>
-</html>
+                errorDiv.textContent = "Please enter a U
