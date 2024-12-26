@@ -24,121 +24,119 @@
 <audio id="soundU" src="u.m4a"></audio>
 <audio id="soundI" src="i.m4a"></audio>
 <audio id="soundA" src="a.m4a"></audio>
-
-
-<script>
-    let audioContext;
-    let audioBuffer;
-    let source;
-    let isKeyDown = false;
-
-    // Define the start and end times of the loopable middle section (in seconds)
-    const loopStart = 0.07; // Adjust this based on your sound
-    const loopEnd = 0.15;   // Adjust this based on your sound
-
-    // Load the audio file when the page loads
-    async function loadAudio() {
-        if (!audioContext) {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        }
-
-        const response = await fetch('u.m4a');
-        const audioData = await response.arrayBuffer();
-        audioBuffer = await audioContext.decodeAudioData(audioData);
-    }
-
-    // Play the audio with loopable middle section
-    function playAudio() {
-        source = audioContext.createBufferSource();
-        source.buffer = audioBuffer;
-
-        // Set loop points
-        source.loop = true;
-        source.loopStart = loopStart;
-        source.loopEnd = loopEnd;
-
-        source.connect(audioContext.destination);
-        source.start(0, 0); // Start playing from the beginning
-    }
-
-    // Stop the audio
-    function stopAudio() {
-        if (source) {
-            source.stop();
-            source = null;
-        }
-    }
-
-    // Event listeners for keydown and keyup
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'u' && !isKeyDown) {
-            isKeyDown = true;
-            playAudio();
-        }
-    });
-
-    document.addEventListener('keyup', (event) => {
-        if (event.key === 'u' && isKeyDown) {
-            isKeyDown = false;
-            stopAudio();
-        }
-    });
-
-    // Load the audio when the page is loaded
-    window.onload = loadAudio;
-</script>
 <!--<script>-->
-<!--    let uiaMoving = false;-->
+<!--    let audioContext;-->
+<!--    let audioBuffer;-->
+<!--    let source;-->
+<!--    let isKeyDown = false;-->
 
-<!--    const imageElement = document.getElementById('dynamicImage');-->
-<!--    const soundU = document.getElementById('soundU');-->
-<!--    const soundI = document.getElementById('soundI');-->
-<!--    const soundA = document.getElementById('soundA');-->
+<!--    // Define the start and end times of the loopable middle section (in seconds)-->
+<!--    const loopStart = 0.07; // Adjust this based on your sound-->
+<!--    const loopEnd = 0.15;   // Adjust this based on your sound-->
 
-<!--    document.addEventListener('keydown', (event) => {-->
-
-<!--        switch (event.key.toLowerCase()) {-->
-<!--            case 'u':-->
-<!--            case 'i':-->
-<!--            case 'a':-->
-<!--                const uiaPrev = uiaMoving;-->
-<!--                if (uiaPrev == false) {-->
-<!--                    imageElement.src = "uia_move_infinite.gif";-->
-<!--                    uiaMoving = true;-->
-<!--                }-->
-<!--                break;-->
-<!--            default:-->
-<!--                // Do nothing for other keys-->
-<!--                break;-->
+<!--    // Load the audio file when the page loads-->
+<!--    async function loadAudio() {-->
+<!--        if (!audioContext) {-->
+<!--            audioContext = new (window.AudioContext || window.webkitAudioContext)();-->
 <!--        }-->
 
-<!--        switch (event.key.toLowerCase()) {-->
-<!--            case 'u':-->
-<!--                soundU.currentTime = 0;-->
-<!--                soundU.play();-->
-<!--                break;-->
-<!--            case 'i':-->
-<!--                soundI.currentTime = 0;-->
-<!--                soundI.play();-->
-<!--                break;-->
-<!--            case 'a':-->
-<!--                soundA.currentTime = 0;-->
-<!--                soundA.play();-->
-<!--                break;-->
-<!--            default:-->
-<!--                // Do nothing for other keys-->
-<!--                break;-->
+<!--        const response = await fetch('u.m4a');-->
+<!--        const audioData = await response.arrayBuffer();-->
+<!--        audioBuffer = await audioContext.decodeAudioData(audioData);-->
+<!--    }-->
+
+<!--    // Play the audio with loopable middle section-->
+<!--    function playAudio() {-->
+<!--        source = audioContext.createBufferSource();-->
+<!--        source.buffer = audioBuffer;-->
+
+<!--        // Set loop points-->
+<!--        source.loop = true;-->
+<!--        source.loopStart = loopStart;-->
+<!--        source.loopEnd = loopEnd;-->
+
+<!--        source.connect(audioContext.destination);-->
+<!--        source.start(0, 0); // Start playing from the beginning-->
+<!--    }-->
+
+<!--    // Stop the audio-->
+<!--    function stopAudio() {-->
+<!--        if (source) {-->
+<!--            source.stop();-->
+<!--            source = null;-->
+<!--        }-->
+<!--    }-->
+
+<!--    // Event listeners for keydown and keyup-->
+<!--    document.addEventListener('keydown', (event) => {-->
+<!--        if (event.key === 'u' && !isKeyDown) {-->
+<!--            isKeyDown = true;-->
+<!--            playAudio();-->
 <!--        }-->
 <!--    });-->
 
 <!--    document.addEventListener('keyup', (event) => {-->
-<!--        const uiaPrev = uiaMoving;-->
-<!--        if (uiaPrev == true) {-->
-<!--            imageElement.src = "uia_still.gif";-->
-<!--            uiaMoving = false;-->
+<!--        if (event.key === 'u' && isKeyDown) {-->
+<!--            isKeyDown = false;-->
+<!--            stopAudio();-->
 <!--        }-->
 <!--    });-->
 
+<!--    // Load the audio when the page is loaded-->
+<!--    window.onload = loadAudio;-->
 <!--</script>-->
+<script>
+    let uiaMoving = false;
+
+    const imageElement = document.getElementById('dynamicImage');
+    const soundU = document.getElementById('soundU');
+    const soundI = document.getElementById('soundI');
+    const soundA = document.getElementById('soundA');
+
+    document.addEventListener('keydown', (event) => {
+
+        switch (event.key.toLowerCase()) {
+            case 'u':
+            case 'i':
+            case 'a':
+                const uiaPrev = uiaMoving;
+                if (uiaPrev == false) {
+                    imageElement.src = "uia_move_infinite.gif";
+                    uiaMoving = true;
+                }
+                break;
+            default:
+                // Do nothing for other keys
+                break;
+        }
+
+        switch (event.key.toLowerCase()) {
+            case 'u':
+                soundU.currentTime = 0;
+                soundU.play();
+                break;
+            case 'i':
+                soundI.currentTime = 0;
+                soundI.play();
+                break;
+            case 'a':
+                soundA.currentTime = 0;
+                soundA.play();
+                break;
+            default:
+                // Do nothing for other keys
+                break;
+        }
+    });
+
+    document.addEventListener('keyup', (event) => {
+        const uiaPrev = uiaMoving;
+        if (uiaPrev == true) {
+            imageElement.src = "uia_still.gif";
+            uiaMoving = false;
+        }
+    });
+
+</script>
 </body>
 </html>
